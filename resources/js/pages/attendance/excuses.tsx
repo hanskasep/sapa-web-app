@@ -10,6 +10,7 @@ import {
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 import InputError from '@/components/input-error';
+import { AttendanceTabs } from '@/components/sapa/attendance-tabs';
 import { DataTablePagination } from '@/components/sapa/data-table-pagination';
 import type { PaginationMeta } from '@/components/sapa/data-table-pagination';
 import { DataTableToolbar } from '@/components/sapa/data-table-toolbar';
@@ -205,6 +206,7 @@ export default function AttendanceExcusesIndex({
         <>
             <Head title="Izin & Sakit" />
             <div className="flex h-full flex-1 flex-col gap-6 p-4 md:p-6">
+                <AttendanceTabs active="excuses" />
                 <section className="flex flex-wrap items-end justify-between gap-3 border-b border-sidebar-border/70 pb-5 dark:border-sidebar-border">
                     <div>
                         <p className="text-sm font-medium text-muted-foreground">

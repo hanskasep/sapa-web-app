@@ -15,6 +15,7 @@ import {
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { FormEvent } from 'react';
 import InputError from '@/components/input-error';
+import { AttendanceTabs } from '@/components/sapa/attendance-tabs';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -438,6 +439,7 @@ export default function AttendanceIndex({
             <Head title="Absensi" />
 
             <div className="flex h-full flex-1 flex-col gap-4 p-4">
+                <AttendanceTabs active="attendance" />
                 <section className="flex flex-col gap-4 border-b border-sidebar-border/70 pb-5 md:flex-row md:items-end md:justify-between dark:border-sidebar-border">
                     <div>
                         <p className="text-sm font-medium text-muted-foreground">
