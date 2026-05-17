@@ -33,14 +33,26 @@ class DashboardController extends Controller
 
         $progress = $student
             ? $this->xp->progressFor($student)
-            : ['xp' => 0, 'level' => 1, 'level_size' => $this->xp->levelThreshold(), 'percent' => 0];
+            : [
+                'xp' => 0,
+                'level' => 1,
+                'into_level' => 0,
+                'level_size' => $this->xp->levelThreshold(),
+                'percent' => 0,
+            ];
 
         return Inertia::render('dashboard', [
             'role' => $role,
             'overview' => [
                 'weeklyGoal' => $this->weeklyGoal($student),
                 'level' => $progress['level'],
+                // Total XP earned across all time. Useful for display + leaderboards.
                 'xp' => $progress['xp'],
+                // Progress within the current level toward the next. Use this
+                // for the level progress bar — `xp` (total) divided by
+                // `xpToNextLevel` (level size) is misleading once a student
+                // crosses the first level threshold (e.g. 190/160 at lv2).
+                'xpIntoLevel' => (int) $progress['into_level'],
                 'xpToNextLevel' => (int) $progress['level_size'],
             ],
             'attendance' => $this->attendance($student),
