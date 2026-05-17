@@ -15,6 +15,11 @@ class ClassInsightController extends Controller
 {
     public function index(Request $request): Response
     {
+        abort_unless(
+            $request->user()?->can(SystemPermission::ViewClassInsights->value) ?? false,
+            403,
+        );
+
         $classes = SchoolClass::query()
             ->where('is_active', true)
             ->orderBy('name')
@@ -53,8 +58,7 @@ class ClassInsightController extends Controller
     public function store(Request $request, ClassInsightService $service): RedirectResponse
     {
         abort_unless(
-            ($request->user()?->can(SystemPermission::CreateGrades->value) ?? false)
-                || ($request->user()?->can(SystemPermission::UpdateGrades->value) ?? false),
+            $request->user()?->can(SystemPermission::CreateClassInsights->value) ?? false,
             403,
         );
 

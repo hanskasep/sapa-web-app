@@ -56,7 +56,7 @@ class MenuSeeder extends Seeder
         $this->menu('Insight Kelas', $platform->id, [
             'route' => '/class-insights',
             'icon' => 'BarChart3',
-            'permission_name' => SystemPermission::ViewGrades->value,
+            'permission_name' => SystemPermission::ViewClassInsights->value,
             'order' => 60,
         ]);
 

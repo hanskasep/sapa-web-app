@@ -51,6 +51,9 @@ enum SystemPermission: string
     case UpdateGrades = 'grades.update';
     case DeleteGrades = 'grades.delete';
 
+    case ViewClassInsights = 'class_insights.view';
+    case CreateClassInsights = 'class_insights.create';
+
     case ViewLms = 'lms.view';
     case CreateLms = 'lms.create';
     case UpdateLms = 'lms.update';
