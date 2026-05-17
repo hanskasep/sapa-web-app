@@ -32,7 +32,11 @@ type Role = 'admin' | 'guru' | 'siswa' | 'orang_tua' | 'pending';
 type Overview = {
     weeklyGoal: number;
     level: number;
+    /** Total lifetime XP earned. */
     xp: number;
+    /** XP earned within the current level toward the next level. */
+    xpIntoLevel: number;
+    /** XP needed to clear one level (size of one level bucket). */
     xpToNextLevel: number;
 };
 
@@ -489,7 +493,9 @@ function StudentDashboard({
         overview.xpToNextLevel > 0
             ? Math.min(
                   100,
-                  Math.round((overview.xp / overview.xpToNextLevel) * 100),
+                  Math.round(
+                      (overview.xpIntoLevel / overview.xpToNextLevel) * 100,
+                  ),
               )
             : 0;
 
@@ -548,7 +554,8 @@ function StudentDashboard({
                                     Progress XP
                                 </p>
                                 <p className="text-muted-foreground">
-                                    {overview.xp} / {overview.xpToNextLevel} XP
+                                    {overview.xpIntoLevel} /{' '}
+                                    {overview.xpToNextLevel} XP
                                 </p>
                             </div>
                             <div className="mt-2 h-2.5 overflow-hidden rounded-full bg-muted">
@@ -557,6 +564,9 @@ function StudentDashboard({
                                     style={{ width: `${xpProgress}%` }}
                                 />
                             </div>
+                            <p className="mt-1.5 text-[11px] text-muted-foreground">
+                                Total {overview.xp} XP terkumpul
+                            </p>
                         </div>
                     </div>
                 </div>
