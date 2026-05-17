@@ -1,4 +1,4 @@
-import { Head, router, useForm } from '@inertiajs/react';
+import { Head, router, useForm, usePage } from '@inertiajs/react';
 import {
     AlertTriangle,
     BarChart3,
@@ -68,6 +68,8 @@ export default function ClassInsightsIndex({
     insights,
     aiEnabled,
 }: Props) {
+    const { auth } = usePage().props;
+    const canGenerate = auth.permissions.includes('class_insights.create');
     const form = useForm({ school_class_id: selectedClassId ?? 0 });
 
     function selectClass(id: number) {
@@ -115,7 +117,10 @@ export default function ClassInsightsIndex({
                     <Button
                         onClick={generate}
                         disabled={
-                            !aiEnabled || !selectedClassId || form.processing
+                            !aiEnabled ||
+                            !selectedClassId ||
+                            !canGenerate ||
+                            form.processing
                         }
                         className="gap-2"
                     >

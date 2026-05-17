@@ -45,6 +45,8 @@ class RoleAndPermissionSeeder extends Seeder
             SystemPermission::ViewGrades->value,
             SystemPermission::CreateGrades->value,
             SystemPermission::UpdateGrades->value,
+            SystemPermission::ViewClassInsights->value,
+            SystemPermission::CreateClassInsights->value,
             SystemPermission::ViewLms->value,
             SystemPermission::CreateLms->value,
             SystemPermission::UpdateLms->value,

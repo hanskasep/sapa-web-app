@@ -65,7 +65,7 @@ const mainNavItems: NavItem[] = [
         title: 'Insight Kelas',
         href: '/class-insights',
         icon: BarChart3,
-        permissions: ['grades.view'],
+        permissions: ['class_insights.view'],
     },
     {
         title: 'XP',

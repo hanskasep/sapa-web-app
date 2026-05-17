@@ -5,6 +5,7 @@ import {
     CheckCircle2,
     ClipboardPlus,
     FileSpreadsheet,
+    Info,
     Save,
     ShieldAlert,
 } from 'lucide-react';
@@ -590,9 +591,19 @@ export default function GradesIndex({
                                                     value,
                                                 )
                                             }
+                                            disabled={
+                                                selectableStudents.length === 0
+                                            }
                                         >
                                             <SelectTrigger className="w-full">
-                                                <SelectValue placeholder="Pilih siswa" />
+                                                <SelectValue
+                                                    placeholder={
+                                                        selectableStudents.length ===
+                                                        0
+                                                            ? 'Tidak ada siswa di kelas ini'
+                                                            : 'Pilih siswa'
+                                                    }
+                                                />
                                             </SelectTrigger>
                                             <SelectContent>
                                                 {selectableStudents.map(
@@ -612,6 +623,43 @@ export default function GradesIndex({
                                                 scoreForm.errors.student_id
                                             }
                                         />
+                                        {selectedAssessment &&
+                                            selectableStudents.length === 0 && (
+                                                <div className="flex items-start gap-2 rounded-md border border-amber-200 bg-amber-50 p-2.5 text-xs text-amber-800 dark:border-amber-900/60 dark:bg-amber-950/40 dark:text-amber-200">
+                                                    <Info className="mt-0.5 size-3.5 shrink-0" />
+                                                    <span>
+                                                        Belum ada siswa aktif
+                                                        di kelas{' '}
+                                                        <strong>
+                                                            {
+                                                                selectedAssessment
+                                                                    .school_class
+                                                                    .name
+                                                            }
+                                                        </strong>
+                                                        . Tambahkan siswa atau
+                                                        atur{' '}
+                                                        <em>kelas</em> &amp;{' '}
+                                                        <em>status aktif</em>{' '}
+                                                        siswa di menu{' '}
+                                                        <a
+                                                            href="/admin/students"
+                                                            className="underline underline-offset-2"
+                                                        >
+                                                            Admin → Siswa
+                                                        </a>
+                                                        .
+                                                    </span>
+                                                </div>
+                                            )}
+                                        {!selectedAssessment &&
+                                            assessments.length === 0 && (
+                                                <p className="text-xs text-muted-foreground">
+                                                    Pilih komponen nilai dulu
+                                                    untuk menampilkan daftar
+                                                    siswa.
+                                                </p>
+                                            )}
                                     </div>
 
                                     <div className="grid gap-2">

@@ -89,11 +89,11 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('lms.index');
 
     Route::get('class-insights', [ClassInsightController::class, 'index'])
-        ->middleware('permission:grades.view')
+        ->middleware('permission:class_insights.view')
         ->name('class-insights.index');
 
     Route::post('class-insights', [ClassInsightController::class, 'store'])
-        ->middleware('permission:grades.create|grades.update')
+        ->middleware('permission:class_insights.create')
         ->name('class-insights.store');
 
     Route::resource('lms/ai/chat', LmsAiChatController::class)
