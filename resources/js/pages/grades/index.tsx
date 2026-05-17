@@ -304,16 +304,59 @@ export default function GradesIndex({
             return [];
         }
 
+        // Use Number() to be resilient to string/number mismatch coming from
+        // different DB drivers or JSON serialization environments. The same
+        // comparison must work whether `school_class_id` arrives as 7 or "7".
+        const targetClassId = Number(assessment.school_class.id);
+
+        // Temporary debug logging to diagnose production data shape mismatch.
+        // Logs sample of student records and the comparison values when no
+        // students match the selected class. Remove after production is fixed.
+        if (typeof window !== 'undefined' && students.length > 0) {
+            const matched = students.filter(
+                (student) =>
+                    student.school_class_id !== null &&
+                    Number(student.school_class_id) === targetClassId,
+            );
+
+            if (matched.length === 0) {
+                const sampleStudents = students.slice(0, 3).map((s) => ({
+                    id: s.id,
+                    name: s.name,
+                    school_class_id: s.school_class_id,
+                    school_class_id_type: typeof s.school_class_id,
+                }));
+
+                // eslint-disable-next-line no-console
+                console.warn('[grades-bulk] No students matched class', {
+                    targetClassId,
+                    targetClassIdType: typeof assessment.school_class.id,
+                    targetClassRaw: assessment.school_class.id,
+                    totalStudents: students.length,
+                    sampleStudents,
+                    distinctClassIds: [
+                        ...new Set(
+                            students
+                                .map((s) => s.school_class_id)
+                                .filter((v) => v !== null),
+                        ),
+                    ],
+                });
+            }
+        }
+
         return students
             .filter(
                 (student) =>
-                    student.school_class_id === assessment.school_class.id,
+                    student.school_class_id !== null &&
+                    Number(student.school_class_id) === targetClassId,
             )
             .map((student) => {
                 const existing = bulkScores.find(
                     (score) =>
-                        score.grade_assessment_id === assessment.id &&
-                        score.student_id === student.id,
+                        Number(score.grade_assessment_id) ===
+                            Number(assessment.id) &&
+                        Number(score.student_id) === Number(student.id),
                 );
 
                 return {
@@ -1265,23 +1308,33 @@ export default function GradesIndex({
                                                                         stats.active
                                                                     }{' '}
                                                                     siswa aktif,
-                                                                    namun tidak
-                                                                    ada yang
-                                                                    bisa
-                                                                    ditampilkan.
-                                                                    Cek apakah
-                                                                    siswa sudah
-                                                                    di-assign
-                                                                    ke kelas ini
-                                                                    di{' '}
-                                                                    <a
-                                                                        href="/admin/students"
+                                                                    namun
+                                                                    daftar
+                                                                    siswa belum
+                                                                    siap. Coba{' '}
+                                                                    <button
+                                                                        type="button"
+                                                                        onClick={() =>
+                                                                            window.location.reload()
+                                                                        }
                                                                         className="underline underline-offset-2"
                                                                     >
-                                                                        Admin →
-                                                                        Siswa
-                                                                    </a>
-                                                                    .
+                                                                        muat
+                                                                        ulang
+                                                                        halaman
+                                                                    </button>
+                                                                    . Jika
+                                                                    masih
+                                                                    kosong,
+                                                                    laporkan ke
+                                                                    admin (kelas
+                                                                    ID:{' '}
+                                                                    {
+                                                                        selectedAssessment
+                                                                            .school_class
+                                                                            .id
+                                                                    }
+                                                                    ).
                                                                 </span>
                                                             );
                                                         })()}
